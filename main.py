@@ -19,8 +19,7 @@ async def on_ready():
 async def katakan(ctx, *, question):
     message = ctx.message
     await message.delete()
-
-    await ctx.send(f"{question}")
+    await ctx.send(f"{question}") #need a fix
 
 @commands.command()
 async def p(ctx):
