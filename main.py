@@ -5,21 +5,29 @@ from keep_alive import keep_alive
 from discord.ext import commands
 import random
 import datetime
-from datetime import datetime
+import pytz
+
+wib = pytz.timezone('Asia/Jakarta') 
+current_time = datetime.datetime.now(wib)
+
 
 # client = discord.Client() # not used
-commands = commands.Bot(command_prefix='')#make command, tapi gamake :v
+commands = commands.Bot(command_prefix='')#make command tapi gamake :v
 
+f = open('pesan.txt', 'r')
+file_contents = f.read()
 
 @commands.event
 async def on_ready():
+    await commands.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="DotA2 TI 10"))
     print('Masuk dengan {0.user}'.format(commands))
 
 @commands.command()
 async def katakan(ctx, *, question):
     message = ctx.message
     await message.delete()
-    await ctx.send(f"{question}") #need a fix
+
+    await ctx.send(f"{question}")
 
 @commands.command()
 async def p(ctx):
@@ -85,6 +93,9 @@ async def on_message(message):
     if message.content.startswith('apa kabar'):
         await message.channel.send('Alhamdulillah sehat')
 
+    if pesankeciltanpaspasi.startswith('goodnight'):
+      await message.channel.send(file_contents)      
+
     if pesankecil.startswith('pilih'):
         pilihan = pesankecil
         pilihan = pilihan.replace('pilih', '').replace('atau', '')
@@ -109,9 +120,42 @@ async def on_message(message):
         embed.add_field(name='🕓' ,value='Jam 👇')
         await message.channel.send(embed=embed)
     
+    #greet in time
+    if pesankeciltanpaspasi.startswith('selamatsiang'):
+       jamsekarang = current_time.hour
+       pesan = ''
+       if jamsekarang >= 11 and jamsekarang <= 17:
+          pesan = 'Siang 🌞'      
+       elif jamsekarang > 17 and jamsekarang <= 3:
+          pesan = 'Udah malem wooyy'
+       elif jamsekarang > 3 and jamsekarang < 11:
+          pesan = 'Masih pagi heh'      
+       await message.channel.send(pesan)
+    if pesankeciltanpaspasi.startswith('selamatmalam'):
+       jamsekarang = current_time.hour
+       pesan = ''
+       if jamsekarang >= 11 and jamsekarang <= 17:
+          pesan = 'Masih siang wooyyy 🌞'      
+       elif jamsekarang > 17 and jamsekarang <= 3:
+          pesan = 'Malemmmm 😴'
+       elif jamsekarang > 3 and jamsekarang < 11:
+          pesan = 'Masih pagi heh'      
+       await message.channel.send(pesan)
+
+    if pesankeciltanpaspasi.startswith('selamatpagi'):
+       jamsekarang = current_time.hour
+       pesan = ''
+       if jamsekarang >= 11 and jamsekarang <= 17:
+          pesan = 'udah siang wooyyy 🌞'      
+       elif jamsekarang > 17 and jamsekarang <= 3:
+          pesan = 'masih pagi heh'
+       elif jamsekarang > 3 and jamsekarang < 11:
+          pesan = 'Pagi............ udah sarapan?'      
+       await message.channel.send(pesan)
+
     await commands.process_commands(message)
 
 
 keep_alive()
-my_secret = os.environ['TOKEN']#Token bisa di taruh di file json
+my_secret = os.environ['TOKEN']
 commands.run(my_secret)
