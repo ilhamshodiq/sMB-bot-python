@@ -112,8 +112,11 @@ async def on_message(message):
     if pesankecil.startswith('makasih'):
         await message.reply('sama-sama 😄')
 
-    if pesankecil.startswith('door'):
+    if pesankecil.startswith('dor'):
         await message.channel.send('kaget wooyy')
+    
+    if pesankecil.startswith('😳'):
+        await message.reply('😳👉👈')        
 
     if pesankecil.startswith('jam berapa sekarang?'):
         embed = discord.Embed(color=discord.Color.dark_purple(), timestamp=datetime.utcnow())
@@ -124,34 +127,40 @@ async def on_message(message):
     if pesankeciltanpaspasi.startswith('selamatsiang'):
        jamsekarang = current_time.hour
        pesan = ''
-       if jamsekarang >= 11 and jamsekarang <= 17:
+       if jamsekarang >= 11 and jamsekarang < 17:
           pesan = 'Siang 🌞'      
-       elif jamsekarang > 17 and jamsekarang <= 3:
+       elif jamsekarang >= 17 or jamsekarang < 3:
           pesan = 'Udah malem wooyy'
-       elif jamsekarang > 3 and jamsekarang < 11:
+       elif jamsekarang >= 3 and jamsekarang < 11:
           pesan = 'Masih pagi heh'      
        await message.channel.send(pesan)
     if pesankeciltanpaspasi.startswith('selamatmalam'):
        jamsekarang = current_time.hour
        pesan = ''
-       if jamsekarang >= 11 and jamsekarang <= 17:
+       if jamsekarang >= 11 and jamsekarang < 17:
           pesan = 'Masih siang wooyyy 🌞'      
-       elif jamsekarang > 17 and jamsekarang <= 3:
+       elif jamsekarang >= 17 or jamsekarang < 3:
           pesan = 'Malemmmm 😴'
-       elif jamsekarang > 3 and jamsekarang < 11:
+       elif jamsekarang >= 3 and jamsekarang < 11:
           pesan = 'Masih pagi heh'      
        await message.channel.send(pesan)
 
     if pesankeciltanpaspasi.startswith('selamatpagi'):
        jamsekarang = current_time.hour
        pesan = ''
-       if jamsekarang >= 11 and jamsekarang <= 17:
+       if jamsekarang >= 11 and jamsekarang < 17:
           pesan = 'udah siang wooyyy 🌞'      
-       elif jamsekarang > 17 and jamsekarang <= 3:
-          pesan = 'masih pagi heh'
-       elif jamsekarang > 3 and jamsekarang < 11:
+       elif jamsekarang >= 17 or jamsekarang < 3:
+          pesan = 'malem sek'
+       elif jamsekarang >= 3 and jamsekarang < 11:
           pesan = 'Pagi............ udah sarapan?'      
        await message.channel.send(pesan)
+    #############################
+
+    if pesankecil.startswith('tolong googlekan'):
+       masukan = pesankecil
+       masukan = masukan.replace('tolong googlekan ', '').replace(' ', '+')
+       await message.reply('https://letmegooglethat.com/?q={}'.format(masukan))
 
     await commands.process_commands(message)
 
