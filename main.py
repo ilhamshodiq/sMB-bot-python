@@ -6,6 +6,8 @@ from discord.ext import commands
 import random
 import datetime
 import pytz
+import youtube_dl
+import pafy
 
 wib = pytz.timezone('Asia/Jakarta') 
 current_time = datetime.datetime.now(wib)
@@ -17,9 +19,14 @@ commands = commands.Bot(command_prefix='')#make command tapi gamake :v
 f = open('pesan.txt', 'r')
 file_contents = f.read()
 
+f2 = open('commands.txt', 'r')
+file_commands = f2.read()
+f3 = open('commands2.txt', 'r')
+file_commands2 = f3.read()
+
 @commands.event
 async def on_ready():
-    await commands.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="DotA2 TI 10"))
+    await commands.change_presence(activity=discord.Game(name="DARK SOULS III"))
     print('Masuk dengan {0.user}'.format(commands))
 
 @commands.command()
@@ -34,12 +41,27 @@ async def p(ctx):
     await ctx.send('{} ms'.format(round(commands.latency * 1000)))
 
 
+#show avatar
 @commands.command()
 async def avatar(ctx, member: discord.Member):
     show_avatar = discord.Embed(color=discord.Color.dark_purple())
     show_avatar.set_image(url='{}'.format(member.avatar_url))
     await ctx.send(embed=show_avatar)
 
+#download yt mp3
+@commands.command()
+async def download_mp3(ctx, *, link):
+    await ctx.reply('Oke tak download sek..')
+    data = link
+    url = pafy.new(data)
+    print(url.title)
+    judul = f'{url.title}.mp3'
+    hasil = url.getbestaudio()
+    hasil.download(judul)
+    await ctx.channel.send(file=discord.File(judul))
+    os.remove(judul)
+
+#alarm
 @commands.command()
 async def ingatkan(ctx, time, *, ingatkan):
     print(time)
@@ -72,6 +94,7 @@ async def ingatkan(ctx, time, *, ingatkan):
         return
     await ctx.send(embed=embed)
 
+#pake event
 @commands.event
 async def on_message(message):
     #input dijadiin lower & hilangin spasi
@@ -157,10 +180,18 @@ async def on_message(message):
        await message.channel.send(pesan)
     #############################
 
+    #googlekan
     if pesankecil.startswith('tolong googlekan'):
        masukan = pesankecil
        masukan = masukan.replace('tolong googlekan ', '').replace(' ', '+')
-       await message.reply('https://letmegooglethat.com/?q={}'.format(masukan))
+       await message.reply('https://letmegooglethat.com/?q={}'.format(masukan))    
+
+    if pesankecil.startswith('--help'):
+       embed = discord.Embed(color=discord.Color.dark_purple())       
+       embed.add_field(name = '**~DAFTAR COMMANDS~**', value = file_commands)
+       embed.add_field(name = '============', value = file_commands2)
+       embed.set_footer(icon_url = commands.user.avatar_url, text = 'commands')
+       await message.channel.send(embed = embed)
 
     await commands.process_commands(message)
 

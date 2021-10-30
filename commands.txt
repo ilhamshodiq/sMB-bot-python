@@ -1,0 +1,24 @@
+_Commandsnya gaada prefix, jadi tinggal ketik aja keywordnya_
+
+**Salam, sapaan, reply**
+`halo`,`Selamat malam`, `Selamat Siang`, `Selamat Pagi`,`konnichiwa`,`uwu`,`apa kabar`,
+`good night`, `tag aku`, `😳`, `terima kasih`,`makasih`,`dor`, `p`
+
+**Katakan**
+`katakan {}` :point_right:_isi kurung "{}" kata yang igin dikatakan_ 
+misal : `katakan peta`
+
+**Chooser**
+`pilih {} atau {} `  :point_right:_isi kurung "{}" dengan kata piihan_
+misal : `pilih makan atau tidur`
+
+**tanya jam**
+`jam berapa sekarang?`
+
+**Minta googlekan**
+`tolong googlekan {}` :point_right:_isi kurung "{}" dengan keyword yg ingin di google_
+misal : `tolong googlekan apa yang terjadi di tiananmen square tahun 1989`
+
+**Avatar**
+`avatar {}` :point_right: _isi kurung "{}" dengan tag user @_
+misal : `avatar @beluga`

@@ -1,0 +1,17 @@
+**Alarm Tag**
+`ingatkan {waktunya} {conteks}` 
+:point_right: _untuk {waktu} isi dengan angka lalu diisi `detik`, `menit`, `jam`, `hari`
+misal : `ingatkan 10 menit lagi aku mau tidur`
+
+**Download yt format mp3**
+`download_mp3 {}`:point_right:_isi kurung "{}" dengan link youtube_
+misal : `donwload_mp3 https://youtu.be/dQw4w9WgXcQ`
+
+**Admin Commands**
+(TBD)
+
+**Music Commands**
+Susah anjer buatnya. Kapan-kapan aja dah wkwk
+
+** FEEDBACK**
+kalo ada saran fitur chat !sMB#6573
