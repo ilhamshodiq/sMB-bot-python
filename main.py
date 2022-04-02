@@ -10,16 +10,16 @@ import youtube_dl
 import pafy
 import requests
 
-# APInya weathermap
-api_key = "f55290c77e1a327777c1a4ed66896ef9"  # pake keymu sendiri lah..
+#APInya weathermap
+api_key = "f55290c77e1a327777c1a4ed66896ef9"#pake keymu sendiri lah..
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
-# timezone wib
+#timezone wib
 wib = pytz.timezone('Asia/Jakarta')
 current_time = datetime.datetime.now(wib)
 
 # client = discord.Client() # not used
-commands = commands.Bot(command_prefix='')  # make command tapi gamake :v
+commands = commands.Bot(command_prefix='')  #make command tapi gamake :v
 
 f = open('pesan.txt', 'r')
 file_contents = f.read()
@@ -36,9 +36,7 @@ async def on_ready():
                                    )
     print('Masuk dengan {0.user}'.format(commands))
 
-# command cuaca
-
-
+#command cuaca
 @commands.command()
 async def cuaca(ctx, *, city: str):
     city_name = city
@@ -48,30 +46,25 @@ async def cuaca(ctx, *, city: str):
     channel = ctx.message.channel
     if x["cod"] != "404":
         async with channel.typing():
-            y = x["main"]
-            current_temperature = y["temp"]
-            current_temperature_celsiuis = str(
-                round(current_temperature - 273.15))
-            current_pressure = y["pressure"]
-            current_humidity = y["humidity"]
-            z = x["weather"]
-            weather_description = z[0]["description"]
-            embed = discord.Embed(title=f"Cuaca di {city_name}",
-                                  color=ctx.guild.me.top_role.color,
-                                  timestamp=ctx.message.created_at,)
-            embed.add_field(name="Deskripsi",
-                            value=f"**{weather_description}**", inline=False)
-            embed.add_field(
-                name="Temperatur(C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
-            embed.add_field(name="Kelembapan(%)",
-                            value=f"**{current_humidity}%**", inline=False)
-            embed.add_field(name="Tekanan Atmosfir(hPa)",
-                            value=f"**{current_pressure}hPa**", inline=False)
-            embed.set_thumbnail(url="https://i.ibb.co/CMrsxdX/weather.png")
-            embed.set_footer(text=f"Requested by {ctx.author.name}")
-            await channel.send(embed=embed)
+          y = x["main"]
+          current_temperature = y["temp"]
+          current_temperature_celsiuis = str(round(current_temperature - 273.15))
+          current_pressure = y["pressure"]
+          current_humidity = y["humidity"]
+          z = x["weather"]
+          weather_description = z[0]["description"]
+          embed = discord.Embed(title=f"Cuaca di {city_name}",
+                            color=ctx.guild.me.top_role.color,
+                            timestamp=ctx.message.created_at,)
+          embed.add_field(name="Deskripsi", value=f"**{weather_description}**", inline=False)
+          embed.add_field(name="Temperatur(C)", value=f"**{current_temperature_celsiuis}°C**", inline=False)
+          embed.add_field(name="Kelembapan(%)", value=f"**{current_humidity}%**", inline=False)
+          embed.add_field(name="Tekanan Atmosfir(hPa)", value=f"**{current_pressure}hPa**", inline=False)
+          embed.set_thumbnail(url="https://i.ibb.co/CMrsxdX/weather.png")
+          embed.set_footer(text=f"Requested by {ctx.author.name}")
+          await channel.send(embed=embed)
     else:
-        await channel.send("City not found.")
+          await channel.send("City not found.")
 
 
 @commands.command()
@@ -87,7 +80,7 @@ async def p(ctx):
     await ctx.send('{} ms'.format(round(commands.latency * 1000)))
 
 
-# userinfo
+#userinfo
 @commands.command()
 async def userinfo(ctx, member: discord.Member = None):
     await ctx.message.delete()
@@ -121,7 +114,7 @@ async def userinfo(ctx, member: discord.Member = None):
         await ctx.send(embed=embed)
 
 
-# show avatar
+#show avatar
 @commands.command()
 async def avatar(ctx, member: discord.Member):
     show_avatar = discord.Embed(color=discord.Color.dark_purple())
@@ -129,7 +122,7 @@ async def avatar(ctx, member: discord.Member):
     await ctx.send(embed=show_avatar)
 
 
-# download yt mp3
+#download yt mp3
 @commands.command()
 async def download_mp3(ctx, *, link):
     await ctx.reply('Oke tak download sek..')
@@ -143,7 +136,7 @@ async def download_mp3(ctx, *, link):
     os.remove(judul)
 
 
-# alarm
+#alarm
 @commands.command()
 async def ingatkan(ctx, time, *, ingatkan):
     print(time)
@@ -183,10 +176,10 @@ async def ingatkan(ctx, time, *, ingatkan):
     await ctx.send(embed=embed)
 
 
-# pake event
+#pake event
 @commands.event
 async def on_message(message):
-    # input dijadiin lower & hilangin spasi
+    #input dijadiin lower & hilangin spasi
     pesankeciltanpaspasi = message.content.lower().replace(' ', '')
     pesankecil = message.content.lower()
 
@@ -275,7 +268,7 @@ async def on_message(message):
         await message.channel.send(pesan)
     #############################
 
-    # googlekan
+    #googlekan
     if pesankecil.startswith('tolong googlekan'):
         masukan = pesankecil
         masukan = masukan.replace('tolong googlekan ', '').replace(' ', '+')
