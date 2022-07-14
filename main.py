@@ -9,6 +9,7 @@ import pytz
 import youtube_dl
 import pafy
 import requests
+import json
 
 # APInya weathermap
 api_key = "f55290c77e1a327777c1a4ed66896ef9"  # pake keymu sendiri lah..
@@ -36,10 +37,8 @@ async def on_ready():
                                    )
     print('Masuk dengan {0.user}'.format(commands))
 
-# command cuaca
 
-
-@commands.command()
+@commands.command()  # command cuaca
 async def cuaca(ctx, *, city: str):
     city_name = city
     complete_url = base_url + "appid=" + api_key + "&q=" + city_name
@@ -74,7 +73,46 @@ async def cuaca(ctx, *, city: str):
         await channel.send("City not found.")
 
 
-@commands.command()
+@commands.command() # cari anime dari gambar, pake API trace.moe
+async def carianime(ctx):    
+    if (len(ctx.message.attachments) == 1):
+        jpgurl = ctx.message.attachments[0].url
+        await ctx.send("Mencari...")
+
+        url = 'https://api.trace.moe/search?anilistInfo&url=' + jpgurl
+        r = requests.get(url)
+        print(r.text)
+        with open('response.json', "w")as f:
+            f.write(str(r.text))
+            f.close()
+        seconds = int(r.json()['result'][0]['from'])
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        await ctx.send('Judul native: ' + str(r.json()['result'][0]['anilist']['title']['native']) + '\n' +
+                       'Judul romaji: ' + str(r.json()['result'][0]['anilist']['title']['romaji']) + '\n' +
+                       'Judul english: ' + str(r.json()['result'][0]['anilist']['title']['english']) + '\n' +
+                       'Episode#' + str(r.json()['result'][0]['episode']) + '\n' +
+                       'Pada menit ke: ' + f'{h:d}:{m:02d}:{s:02d}' + '\n' +
+                       ('%.2f%%' % (float(r.json()['result'][0]['similarity']) * 100) + ' similarity'))
+
+        videourl = r.json()['result'][0]['video']
+
+        if videourl != None and videourl != "":
+            req = requests.get(videourl)
+            videoname = r.json()['result'][0]['filename'] + '.mp4'
+            with open(videoname, "wb")as f:
+                f.write(req.content)
+                f.close()
+            await ctx.send(file=discord.File(videoname))
+            os.remove(videoname)
+
+    elif (len(ctx.message.attachments) > 1):
+        await ctx.reply("Gambarnya kebanyakan oi, satu aja!")
+    else:
+        await ctx.reply("Upload dulu gambarnya!")
+
+
+@ commands.command()
 async def katakan(ctx, *, question):
     message = ctx.message
     await message.delete()
@@ -82,13 +120,13 @@ async def katakan(ctx, *, question):
     await ctx.send(f"{question}")
 
 
-@commands.command()
+@ commands.command()
 async def p(ctx):
     await ctx.send('{} ms'.format(round(commands.latency * 1000)))
 
 
 # userinfo
-@commands.command()
+@ commands.command()
 async def userinfo(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if not member:
@@ -122,7 +160,7 @@ async def userinfo(ctx, member: discord.Member = None):
 
 
 # show avatar
-@commands.command()
+@ commands.command()
 async def avatar(ctx, member: discord.Member):
     show_avatar = discord.Embed(color=discord.Color.dark_purple())
     show_avatar.set_image(url='{}'.format(member.avatar_url))
@@ -130,7 +168,7 @@ async def avatar(ctx, member: discord.Member):
 
 
 # download yt mp3
-@commands.command()
+@ commands.command()
 async def download_mp3(ctx, *, link):
     await ctx.reply('Oke tak download sek..')
     data = link
@@ -144,7 +182,7 @@ async def download_mp3(ctx, *, link):
 
 
 # alarm
-@commands.command()
+@ commands.command()
 async def ingatkan(ctx, time, *, ingatkan):
     print(time)
     print(ingatkan)
@@ -184,7 +222,7 @@ async def ingatkan(ctx, time, *, ingatkan):
 
 
 # pake event
-@commands.event
+@ commands.event
 async def on_message(message):
     # input dijadiin lower & hilangin spasi
     pesankeciltanpaspasi = message.content.lower().replace(' ', '')
@@ -241,7 +279,7 @@ async def on_message(message):
         embed.add_field(name='🕓', value='Jam 👇')
         await message.channel.send(embed=embed)
 
-    #greet in time
+    # greet in time
     if pesankeciltanpaspasi.startswith('selamatsiang'):
         jamsekarang = current_time.hour
         pesan = ''
@@ -296,7 +334,7 @@ async def on_message(message):
 # my_secret = os.environ['TOKEN']
 
 
-#baca token dari file txt
+# baca token dari file txt
 def baca_token():
     with open('token.txt', 'r') as filetoken:
         lines = filetoken.readlines()
