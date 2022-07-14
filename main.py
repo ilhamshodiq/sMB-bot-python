@@ -73,27 +73,35 @@ async def cuaca(ctx, *, city: str):
         await channel.send("City not found.")
 
 
-@commands.command() # cari anime dari gambar, pake API trace.moe
-async def carianime(ctx):    
+@commands.command()  # cari anime dari gambar, pake API trace.moe
+async def carianime(ctx):
     if (len(ctx.message.attachments) == 1):
         jpgurl = ctx.message.attachments[0].url
-        await ctx.send("Mencari...")
+        await ctx.send("Searching...")
 
         url = 'https://api.trace.moe/search?anilistInfo&url=' + jpgurl
         r = requests.get(url)
         print(r.text)
-        with open('response.json', "w")as f:
-            f.write(str(r.text))
-            f.close()
         seconds = int(r.json()['result'][0]['from'])
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
-        await ctx.send('Judul native: ' + str(r.json()['result'][0]['anilist']['title']['native']) + '\n' +
-                       'Judul romaji: ' + str(r.json()['result'][0]['anilist']['title']['romaji']) + '\n' +
-                       'Judul english: ' + str(r.json()['result'][0]['anilist']['title']['english']) + '\n' +
-                       'Episode#' + str(r.json()['result'][0]['episode']) + '\n' +
-                       'Pada menit ke: ' + f'{h:d}:{m:02d}:{s:02d}' + '\n' +
-                       ('%.2f%%' % (float(r.json()['result'][0]['similarity']) * 100) + ' similarity'))
+
+        judulnative = str(r.json()['result'][0]['anilist']['title']['native'])
+        judulromaji = str(r.json()['result'][0]['anilist']['title']['romaji'])
+        judulenglish = str(r.json()['result'][0]
+                           ['anilist']['title']['english'])
+        eps = str(r.json()['result'][0]['episode'])
+        menit = f'{h:d}:{m:02d}:{s:02d}'
+        similiarity = '%.2f%%' % (
+            float(r.json()['result'][0]['similarity']) * 100) + ' similarity'
+        embed = discord.Embed(color=discord.Color.dark_purple())
+        embed.set_image(url=jpgurl)
+        embed.add_field(name='Judul', value='Native:' + judulnative + '\n' +
+                        'Romaji: ' + judulromaji + '\n' + 'English: ' + judulenglish, inline=False)
+        embed.add_field(name='Episode', value=eps)
+        embed.add_field(name='Pada menit ke', value=menit)
+        embed.add_field(name='Similarity', value=similiarity, inline=False)
+        await ctx.reply(embed=embed)
 
         videourl = r.json()['result'][0]['video']
 
@@ -103,7 +111,7 @@ async def carianime(ctx):
             with open(videoname, "wb")as f:
                 f.write(req.content)
                 f.close()
-            await ctx.send(file=discord.File(videoname))
+            await ctx.reply(file=discord.File(videoname))
             os.remove(videoname)
 
     elif (len(ctx.message.attachments) > 1):
